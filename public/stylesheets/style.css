@@ -6,3 +6,18 @@ body {
 a, h1 {
   color: #00cdcd;
 }
+
+span.glyphicon{
+	margin-right: 5px;
+}
+
+.strike-through{
+	text-decoration: line-through;
+}
+
+.fixed{
+	position: fixed;
+	bottom: 3%;
+	right: 2%;
+
+}

@@ -4,9 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+require('./app_api/models/db');
 
-var routes = require('./app_server/routes/index');
-var users = require('./app_server/routes/users');
+
 
 var app = express();
 
@@ -18,13 +18,19 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var routes = require('./app_server/routes/index');
+var users = require('./app_server/routes/users');
+
+var routesApi = require('./app_api/routes/route.api.tasks');
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/api', routesApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -41,8 +47,8 @@ if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
-      message: err.message,
-      error: err
+      title: err.message,
+      content: err
     });
   });
 }
@@ -52,8 +58,8 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
-    message: err.message,
-    error: {}
+    title: err.message,
+    content: {}
   });
 });
 
